@@ -20,7 +20,6 @@ O app permite que o cliente entre na fila do karaokê pelo celular, acompanhe su
 - [ ] Upload de foto do momento no palco (vinculada ao perfil ou à música)
 - [ ] Compartilhar insígnia conquistada (imagem/redes sociais)
 - [ ] Notificação local quando a vez estiver próxima
-- [ ] Sincronização remota da fila (hoje é local por dispositivo)
 - [ ] Ranking de clientes por insígnias
 
 ## Protótipos de tela
@@ -33,67 +32,76 @@ Telas: Home, Entrar na Fila, Minha Fila (posição/status em tempo real), Perfil
 
 ## Modelagem do banco
 
-Banco **local**, no próprio dispositivo, via **SQLite** (`expo-sqlite`). Não há backend remoto nesta fase do MVP — cada instalação do app mantém sua própria fila e histórico. Sincronização entre dispositivos fica como trabalho futuro (ver checklist acima).
+Banco **remoto**, via **[PocketBase](https://pocketbase.io/)** (self-hosted, escrito em Go, SQLite por baixo). App consome REST + realtime pelo SDK oficial (`pocketbase` no npm). Troca a versão 100% local por fila de verdade compartilhada entre aparelhos, e ganha storage de arquivo nativo pro upload de foto — sem precisar gerenciar URI de imagem no dispositivo.
 
-Música não é texto livre: o cliente informa apenas um **número de catálogo (até 6 dígitos)**. O gênero não é escolhido por quem entra na fila — fica associado ao número dentro do catálogo (`CATALOGO_MUSICAS`), e é resolvido automaticamente por consulta ao banco.
+Música não é texto livre: o cliente informa apenas um **número de catálogo (até 6 dígitos)**. O gênero não é escolhido por quem entra na fila — fica associado ao número dentro da collection `catalogo_musicas`, e é resolvido automaticamente por consulta ao banco.
 
-Diagrama entidade-relacionamento:
+Cada entidade abaixo é uma **collection** no PocketBase. Diferenças de plataforma em relação a um schema SQL tradicional:
+
+- `id` é string (15 caracteres, gerado automaticamente) — não int autoincrement. Toda relation aponta para esse `id`, nunca para um campo de negócio.
+- Por isso `catalogo_musicas.numero` deixa de ser PK: vira campo comum com índice único, e `id` (interno) assume o papel de chave.
+- `created` / `updated` são automáticos em toda collection — dispensam os `criado_em` manuais do desenho anterior.
+- Campos que eram `FK int` viram campo tipo **relation**.
+- `fotos` usa campo tipo **file** nativo (upload direto, sem lógica de persistência local).
+
+Diagrama entidade-relacionamento (mesmo modelo lógico, agora como collections remotas):
 
 ```mermaid
 erDiagram
-    PERFIL ||--o{ FILA_ENTRIES : "entra na fila"
-    PERFIL ||--o{ HISTORICO_MUSICAS : "canta"
-    PERFIL ||--o{ INSIGNIAS : "conquista"
-    PERFIL ||--o{ FOTOS : "envia"
-    CATALOGO_MUSICAS ||--o{ FILA_ENTRIES : "identifica"
-    CATALOGO_MUSICAS ||--o{ HISTORICO_MUSICAS : "identifica"
-    HISTORICO_MUSICAS |o--o{ FOTOS : "registra (opcional)"
-    GENERO ||--o{ CATALOGO_MUSICAS : "classifica"
-    GENERO ||--o{ INSIGNIAS : "classifica"
+    perfis ||--o{ fila_entries : "entra na fila"
+    perfis ||--o{ historico_musicas : "canta"
+    perfis ||--o{ insignias : "conquista"
+    perfis ||--o{ fotos : "envia"
+    catalogo_musicas ||--o{ fila_entries : "identifica"
+    catalogo_musicas ||--o{ historico_musicas : "identifica"
+    historico_musicas |o--o{ fotos : "registra (opcional)"
+    generos ||--o{ catalogo_musicas : "classifica"
+    generos ||--o{ insignias : "classifica"
 
-    PERFIL {
-        int id PK
+    perfis {
+        string id PK
         string nome
-        string avatar_uri
-        datetime criado_em
+        file avatar
+        datetime created
     }
-    GENERO {
-        int id PK
+    generos {
+        string id PK
         string nome
     }
-    CATALOGO_MUSICAS {
-        int numero PK "até 6 dígitos"
-        int genero_id FK
+    catalogo_musicas {
+        string id PK
+        int numero "até 6 dígitos, único"
+        relation genero FK
     }
-    FILA_ENTRIES {
-        int id PK
-        int perfil_id FK
-        int numero_musica FK
+    fila_entries {
+        string id PK
+        relation perfil FK
+        relation musica FK
         string status
         int posicao
-        datetime criado_em
+        datetime created
     }
-    HISTORICO_MUSICAS {
-        int id PK
-        int perfil_id FK
-        int numero_musica FK
+    historico_musicas {
+        string id PK
+        relation perfil FK
+        relation musica FK
         datetime cantada_em
     }
-    INSIGNIAS {
-        int id PK
-        int perfil_id FK
-        int genero_id FK
+    insignias {
+        string id PK
+        relation perfil FK
+        relation genero FK
         string nivel
         int quantidade_musicas
         datetime conquistada_em
     }
-    FOTOS {
-        int id PK
-        int perfil_id FK
-        int historico_id FK "opcional - música específica"
-        string uri
+    fotos {
+        string id PK
+        relation perfil FK
+        relation musica FK "opcional"
+        file arquivo
         string tipo
-        datetime criado_em
+        datetime created
     }
 ```
 
@@ -103,7 +111,7 @@ erDiagram
 |---|---|---|
 | 1 | 1–2 | Setup do projeto Expo, navegação entre telas, protótipo de telas no Figma, modelagem do banco (este checkpoint) |
 | 2 | 3–4 | Telas estáticas (Home, Entrar na Fila, Minha Fila, Perfil) com dados mockados |
-| 3 | 5–6 | Integração com SQLite local: criação do schema, CRUD de perfil e fila |
+| 3 | 5–6 | Setup do PocketBase (self-host) + collections do modelo, integração via SDK: CRUD de perfil e fila |
 | 4 | 7–8 | Lógica de fila (entrar/sair, cálculo de posição, atualização de status) |
 | 5 | 9–10 | Sistema de insígnias: histórico de músicas por gênero, cálculo de níveis, tela de conquistas |
 | 6 | 11–12 | Upload de foto (expo-image-picker), polimento de UI, testes manuais e ajustes finais |
