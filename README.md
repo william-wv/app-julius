@@ -34,15 +34,15 @@ Telas: Home, Entrar na Fila, Minha Fila (posição/status em tempo real), Perfil
 
 Banco **remoto**, via **[PocketBase](https://pocketbase.io/)** (self-hosted, escrito em Go, SQLite por baixo). App consome REST + realtime pelo SDK oficial (`pocketbase` no npm). Troca a versão 100% local por fila de verdade compartilhada entre aparelhos, e ganha storage de arquivo nativo pro upload de foto — sem precisar gerenciar URI de imagem no dispositivo.
 
-Música não é texto livre: o cliente informa apenas um **número de catálogo (até 6 dígitos)**. O gênero não é escolhido por quem entra na fila — fica associado ao número dentro da collection `catalogo_musicas`, e é resolvido automaticamente por consulta ao banco.
+Música não é texto livre: o cliente informa apenas um **número de catálogo (até 6 dígitos)**. O gênero não é escolhido por quem entra na fila — vem fixo no cadastro da música (campo `select` na própria collection `musicas`), resolvido automaticamente a partir do número informado.
 
 Cada entidade abaixo é uma **collection** no PocketBase. Diferenças de plataforma em relação a um schema SQL tradicional:
 
 - `id` é string (15 caracteres, gerado automaticamente) — não int autoincrement. Toda relation aponta para esse `id`, nunca para um campo de negócio.
-- Por isso `catalogo_musicas.numero` deixa de ser PK: vira campo comum com índice único, e `id` (interno) assume o papel de chave.
+- Por isso `musicas.numero` deixa de ser PK: vira campo comum com índice único, e `id` (interno) assume o papel de chave.
 - `created` / `updated` são automáticos em toda collection — dispensam os `criado_em` manuais do desenho anterior.
 - Campos que eram `FK int` viram campo tipo **relation**.
-- `status`, `nivel` e `tipo` (valores fixos e pequenos) viram campo tipo **select** — equivalente do CHECK-enum, editável pela UI do PocketBase sem migração.
+- `genero`, `status`, `nivel` e `tipo` (valores fixos e pequenos) viram campo tipo **select** — equivalente do CHECK-enum, editável pela UI do PocketBase sem migração. Gênero não tem collection própria: é select fixo direto em `musicas` (e repetido em `insignias`, já que ali é um resumo por perfil+gênero, não uma referência a registro).
 - `fotos` usa campo tipo **file** nativo (upload direto, sem lógica de persistência local).
 
 Diagrama entidade-relacionamento (mesmo modelo lógico, agora como collections remotas):
@@ -53,11 +53,9 @@ erDiagram
     perfis ||--o{ historico_musicas : "canta"
     perfis ||--o{ insignias : "conquista"
     perfis ||--o{ fotos : "envia"
-    catalogo_musicas ||--o{ fila_entries : "identifica"
-    catalogo_musicas ||--o{ historico_musicas : "identifica"
+    musicas ||--o{ fila_entries : "identifica"
+    musicas ||--o{ historico_musicas : "identifica"
     historico_musicas |o--o{ fotos : "registra (opcional)"
-    generos ||--o{ catalogo_musicas : "classifica"
-    generos ||--o{ insignias : "classifica"
 
     perfis {
         string id PK
@@ -65,14 +63,10 @@ erDiagram
         file avatar
         datetime created
     }
-    generos {
-        string id PK
-        string nome
-    }
-    catalogo_musicas {
+    musicas {
         string id PK
         int numero "até 6 dígitos, único"
-        relation genero FK
+        select genero "Sertanejo | Rock | Pop | Funk | MPB | Forró"
     }
     fila_entries {
         string id PK
@@ -91,7 +85,7 @@ erDiagram
     insignias {
         string id PK
         relation perfil FK
-        relation genero FK
+        select genero "Sertanejo | Rock | Pop | Funk | MPB | Forró"
         select nivel "bronze | prata | ouro"
         int quantidade_musicas
         datetime conquistada_em
@@ -108,11 +102,11 @@ erDiagram
 
 ## Planejamento de sprints
 
-| Sprint | Semanas | Entregas |
-|---|---|---|
-| 1 | 1–2 | Setup do projeto Expo, navegação entre telas, protótipo de telas no Figma, modelagem do banco (este checkpoint) |
-| 2 | 3–4 | Telas estáticas (Home, Entrar na Fila, Minha Fila, Perfil) com dados mockados |
-| 3 | 5–6 | Setup do PocketBase (self-host) + collections do modelo, integração via SDK: CRUD de perfil e fila |
-| 4 | 7–8 | Lógica de fila (entrar/sair, cálculo de posição, atualização de status) |
-| 5 | 9–10 | Sistema de insígnias: histórico de músicas por gênero, cálculo de níveis, tela de conquistas |
-| 6 | 11–12 | Upload de foto (expo-image-picker), polimento de UI, testes manuais e ajustes finais |
+| Sprint | Semanas | Entregas                                                                                                        |
+| ------ | ------- | --------------------------------------------------------------------------------------------------------------- |
+| 1      | 1–2     | Setup do projeto Expo, navegação entre telas, protótipo de telas no Figma, modelagem do banco (este checkpoint) |
+| 2      | 3–4     | Telas estáticas (Home, Entrar na Fila, Minha Fila, Perfil) com dados mockados                                   |
+| 3      | 5–6     | Setup do PocketBase (self-host) + collections do modelo, integração via SDK: CRUD de perfil e fila              |
+| 4      | 7–8     | Lógica de fila (entrar/sair, cálculo de posição, atualização de status)                                         |
+| 5      | 9–10    | Sistema de insígnias: histórico de músicas por gênero, cálculo de níveis, tela de conquistas                    |
+| 6      | 11–12   | Upload de foto (expo-image-picker), polimento de UI, testes manuais e ajustes finais                            |
