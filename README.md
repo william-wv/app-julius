@@ -9,7 +9,7 @@ O app permite que o cliente entre na fila do karaokê pelo celular, acompanhe su
 **Funcionalidades básicas (prioritárias):**
 
 - [ ] Cadastro/identificação simples do cliente (nome, sem senha)
-- [ ] Entrar na fila informando música e gênero
+- [ ] Entrar na fila informando o número da música (até 6 dígitos) — gênero é resolvido automaticamente pelo catálogo no banco, não é escolhido manualmente
 - [ ] Ver posição atual na fila
 - [ ] Ver status da música (aguardando / tocando / concluída)
 - [ ] Histórico de músicas já cantadas pelo cliente
@@ -35,6 +35,8 @@ Telas: Home, Entrar na Fila, Minha Fila (posição/status em tempo real), Perfil
 
 Banco **local**, no próprio dispositivo, via **SQLite** (`expo-sqlite`). Não há backend remoto nesta fase do MVP — cada instalação do app mantém sua própria fila e histórico. Sincronização entre dispositivos fica como trabalho futuro (ver checklist acima).
 
+Música não é texto livre: o cliente informa apenas um **número de catálogo (até 6 dígitos)**. O gênero não é escolhido por quem entra na fila — fica associado ao número dentro do catálogo (`CATALOGO_MUSICAS`), e é resolvido automaticamente por consulta ao banco.
+
 Diagrama entidade-relacionamento:
 
 ```mermaid
@@ -43,7 +45,9 @@ erDiagram
     PERFIL ||--o{ HISTORICO_MUSICAS : "canta"
     PERFIL ||--o{ INSIGNIAS : "conquista"
     PERFIL ||--o{ FOTOS : "envia"
-    GENERO ||--o{ HISTORICO_MUSICAS : "classifica"
+    CATALOGO_MUSICAS ||--o{ FILA_ENTRIES : "identifica"
+    CATALOGO_MUSICAS ||--o{ HISTORICO_MUSICAS : "identifica"
+    GENERO ||--o{ CATALOGO_MUSICAS : "classifica"
     GENERO ||--o{ INSIGNIAS : "classifica"
 
     PERFIL {
@@ -56,11 +60,14 @@ erDiagram
         int id PK
         string nome
     }
+    CATALOGO_MUSICAS {
+        int numero PK "até 6 dígitos"
+        int genero_id FK
+    }
     FILA_ENTRIES {
         int id PK
         int perfil_id FK
-        string musica
-        int genero_id FK
+        int numero_musica FK
         string status
         int posicao
         datetime criado_em
@@ -68,8 +75,7 @@ erDiagram
     HISTORICO_MUSICAS {
         int id PK
         int perfil_id FK
-        string musica
-        int genero_id FK
+        int numero_musica FK
         datetime cantada_em
     }
     INSIGNIAS {
