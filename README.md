@@ -25,7 +25,11 @@ O app permite que o cliente entre na fila do karaokê pelo celular, acompanhe su
 
 ## Protótipos de tela
 
-> TODO: link público do Figma será adicionado aqui após a prototipação.
+Protótipo no Figma (mapa de telas): **[Julius Fila - Protótipos](https://www.figma.com/design/gi5gQYkMtRoWRHfHBSqeVc?node-id=2-10)**
+
+> ⚠️ Link só abre pra quem tem acesso ainda. Falta habilitar "Anyone with the link" (Share → Anyone with the link → Can view) no arquivo antes de entregar.
+
+Telas: Home, Entrar na Fila, Minha Fila (posição/status em tempo real), Perfil com Insígnias por gênero, Upload de Foto (opcional).
 
 ## Modelagem do banco
 
