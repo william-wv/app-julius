@@ -47,6 +47,7 @@ erDiagram
     PERFIL ||--o{ FOTOS : "envia"
     CATALOGO_MUSICAS ||--o{ FILA_ENTRIES : "identifica"
     CATALOGO_MUSICAS ||--o{ HISTORICO_MUSICAS : "identifica"
+    HISTORICO_MUSICAS |o--o{ FOTOS : "registra (opcional)"
     GENERO ||--o{ CATALOGO_MUSICAS : "classifica"
     GENERO ||--o{ INSIGNIAS : "classifica"
 
@@ -89,6 +90,7 @@ erDiagram
     FOTOS {
         int id PK
         int perfil_id FK
+        int historico_id FK "opcional - música específica"
         string uri
         string tipo
         datetime criado_em
