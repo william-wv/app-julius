@@ -42,6 +42,7 @@ Cada entidade abaixo é uma **collection** no PocketBase. Diferenças de platafo
 - Por isso `catalogo_musicas.numero` deixa de ser PK: vira campo comum com índice único, e `id` (interno) assume o papel de chave.
 - `created` / `updated` são automáticos em toda collection — dispensam os `criado_em` manuais do desenho anterior.
 - Campos que eram `FK int` viram campo tipo **relation**.
+- `status`, `nivel` e `tipo` (valores fixos e pequenos) viram campo tipo **select** — equivalente do CHECK-enum, editável pela UI do PocketBase sem migração.
 - `fotos` usa campo tipo **file** nativo (upload direto, sem lógica de persistência local).
 
 Diagrama entidade-relacionamento (mesmo modelo lógico, agora como collections remotas):
@@ -77,7 +78,7 @@ erDiagram
         string id PK
         relation perfil FK
         relation musica FK
-        string status
+        select status "aguardando | tocando | concluida"
         int posicao
         datetime created
     }
@@ -91,7 +92,7 @@ erDiagram
         string id PK
         relation perfil FK
         relation genero FK
-        string nivel
+        select nivel "bronze | prata | ouro"
         int quantidade_musicas
         datetime conquistada_em
     }
@@ -100,7 +101,7 @@ erDiagram
         relation perfil FK
         relation musica FK "opcional"
         file arquivo
-        string tipo
+        select tipo "perfil | momento"
         datetime created
     }
 ```
