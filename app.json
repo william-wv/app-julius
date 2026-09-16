@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Julius Fila",
+    "slug": "julius-fila",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.julius.fila"
+    },
+    "android": {
+      "package": "com.julius.fila"
+    }
+  }
+}
