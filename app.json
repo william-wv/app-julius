@@ -2,6 +2,7 @@
   "expo": {
     "name": "Julius Fila",
     "slug": "julius-fila",
+    "scheme": "juliusfila",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -11,6 +12,10 @@
     },
     "android": {
       "package": "com.julius.fila"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-asset"
+    ]
   }
 }
