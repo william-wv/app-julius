@@ -2,58 +2,134 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Padrão global do app: classes semânticas montadas com os tokens do tailwind.config.js. */
+/* Padrão global do app, medido no Figma "Julius Fila — Telas (mobile)". */
 @layer components {
   /* Layout */
   .screen {
-    @apply flex-1 gap-4 bg-background p-screen;
+    @apply flex-1 bg-branco;
   }
   .screen-content {
-    @apply gap-4 p-screen;
+    @apply gap-4 px-tela py-8;
+  }
+  .hero {
+    @apply gap-3 bg-palco px-tela pb-10;
+  }
+  .hero-center {
+    @apply items-center gap-4 pb-7;
+  }
+  .hero-vinho {
+    @apply bg-vinho;
   }
 
   /* Tipografia */
-  .brand {
-    @apply text-display tracking-[4px] text-accent;
+  .marca {
+    @apply font-oswald text-marca tracking-[2px] text-luz;
   }
-  .heading {
-    @apply text-title text-accent;
+  .numero {
+    @apply font-oswald text-numero text-luz;
   }
-  .body {
-    @apply text-body text-text;
+  .titulo {
+    @apply font-inter-semibold text-titulo text-palco;
   }
-  .muted {
-    @apply text-caption text-muted;
+  .secao {
+    @apply font-inter-semibold text-apoio text-palco;
+  }
+  .corpo {
+    @apply font-inter text-corpo text-palco;
+  }
+  .apoio {
+    @apply font-inter text-apoio text-palco opacity-75;
+  }
+  .rotulo {
+    @apply font-inter-medium text-rotulo text-palco opacity-60;
+  }
+  .nota {
+    @apply text-center font-inter text-mini text-palco opacity-55;
   }
   .link {
-    @apply text-body font-semibold text-accent;
+    @apply font-inter-semibold text-corpo text-vinho;
+  }
+  .texto-claro {
+    @apply font-inter text-corpo text-texto-claro;
   }
 
-  /* Card */
-  .card {
-    @apply gap-2 rounded-card border border-border bg-surface p-4;
+  /* Pílula (status no hero) */
+  .pilula {
+    @apply self-start rounded-full px-3 py-1.5;
   }
-  .card-title {
-    @apply text-caption font-bold uppercase tracking-widest text-accent;
+  .pilula-texto {
+    @apply font-inter-semibold text-rotulo text-palco;
   }
 
   /* Botão */
   .btn {
-    @apply items-center rounded-button px-5 py-3.5;
+    @apply w-full items-center justify-center rounded-botao py-4;
   }
   .btn-primary {
-    @apply bg-accent;
+    @apply bg-vinho;
   }
-  .btn-ghost {
-    @apply border border-accent bg-transparent;
+  .btn-outline {
+    @apply border border-perigo bg-branco py-3.5;
   }
-  .btn-label {
-    @apply text-body font-bold;
+  .btn-secondary {
+    @apply border border-borda bg-branco;
+  }
+  .btn-label-secondary {
+    @apply font-inter-semibold text-botao text-palco;
   }
   .btn-label-primary {
-    @apply text-background;
+    @apply font-inter-semibold text-botao text-texto-claro;
   }
-  .btn-label-ghost {
-    @apply text-accent;
+  .btn-label-outline {
+    @apply font-inter-semibold text-corpo text-vinho;
+  }
+
+  /* Card genérico */
+  .card {
+    @apply gap-1.5 rounded-campo bg-superficie px-3.5 py-3;
+  }
+
+  /* Chip de gênero */
+  .chip {
+    @apply rounded-full border border-borda bg-branco px-3.5 py-2;
+  }
+  .chip-ativo {
+    @apply border-vinho bg-vinho;
+  }
+  .chip-texto {
+    @apply font-inter-medium text-apoio text-palco opacity-70;
+  }
+  .chip-texto-ativo {
+    @apply text-texto-claro opacity-100;
+  }
+
+  /* Item da fila */
+  .fila-item {
+    @apply flex-row items-center gap-3 rounded-campo bg-superficie px-3.5 py-3;
+  }
+  .fila-item-voce {
+    @apply bg-pessego;
+  }
+  .fila-posicao {
+    @apply h-7 w-7 items-center justify-center rounded-full bg-vinho;
+  }
+  .fila-posicao-tocando {
+    @apply bg-luz;
+  }
+
+  /* Upload de foto */
+  .foto-vazia {
+    @apply items-center justify-center gap-2.5 rounded-2xl border-[1.5px] border-dashed border-tracejado bg-superficie py-12;
+  }
+  .foto-miniatura {
+    @apply h-20 w-20 rounded-[10px];
+  }
+
+  /* Insígnia (BadgeCard) */
+  .insignia {
+    @apply w-[150px] gap-1.5 rounded-botao bg-luz px-3.5 py-4;
+  }
+  .insignia-bloqueada {
+    @apply bg-bloqueado opacity-70;
   }
 }

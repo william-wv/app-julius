@@ -1,21 +1,19 @@
+// Paleta do Figma "Julius Fila — Telas (mobile)". Nomes iguais às variáveis do Figma.
 export const colors = {
-  background: "#2A0C0D",
-  surface: "#3A1517",
-  border: "#5A2A2C",
-  accent: "#E7B24C",
-  text: "#F5E4DA",
-  muted: "#A88F84",
-  danger: "#E5484D",
+  palco: "#2A0C0D", // fundo do hero, texto principal
+  vinho: "#541C1D", // CTA, aba Home, cabeçalho do perfil
+  luz: "#E7B24C", // marca, destaque, "tocando", insígnia conquistada
+  textoClaro: "#F5E4DA", // texto sobre palco/vinho
+  pessego: "#FCCAAF", // sua entrada na fila
+  branco: "#FFFFFF",
 
-  // status da fila
-  aguardando: "#A88F84",
-  tocando: "#E7B24C",
-  concluida: "#4CAF7A",
-
-  // níveis de insígnia
-  bronze: "#B87333",
-  prata: "#C0C0C0",
-  ouro: "#E7B24C",
+  // neutros
+  superficie: "#F7F5F2", // item da fila
+  bloqueado: "#F2EFEB", // insígnia bloqueada
+  borda: "#D9CCC7", // inputs, chips e botão secundário
+  tracejado: "#BFADA1", // borda tracejada do quadro de foto
+  divisor: "#E5DED9", // borda da BottomNav
+  perigo: "#B24D4D", // ação destrutiva
 } as const;
 
 export type ColorToken = keyof typeof colors;

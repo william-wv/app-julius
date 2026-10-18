@@ -1,13 +1,19 @@
 import { forwardRef } from "react";
-import { Pressable, StyleSheet, Text, View, type PressableProps } from "react-native";
-import { colors } from "../theme/colors";
+import { Pressable, Text, View, type PressableProps } from "react-native";
 
-type Variant = "primary" | "ghost";
+type Variant = "primary" | "secondary" | "outline";
 
 interface ButtonProps extends Omit<PressableProps, "children" | "style"> {
   label: string;
   variant?: Variant;
 }
+
+// Nomes completos (sem template string) para o Tailwind encontrar as classes no código.
+const variants: Record<Variant, { container: string; label: string }> = {
+  primary: { container: "btn-primary", label: "btn-label-primary" },
+  secondary: { container: "btn-secondary", label: "btn-label-secondary" },
+  outline: { container: "btn-outline", label: "btn-label-outline" },
+};
 
 // forwardRef permite usar dentro de <Link asChild> do expo-router.
 export const Button = forwardRef<View, ButtonProps>(function Button(
@@ -19,46 +25,10 @@ export const Button = forwardRef<View, ButtonProps>(function Button(
       ref={ref}
       accessibilityRole="button"
       disabled={disabled}
-      style={({ pressed }) => [
-        styles.base,
-        styles[variant],
-        pressed && styles.pressed,
-        disabled && styles.disabled,
-      ]}
+      className={`btn ${variants[variant].container} active:opacity-80 ${disabled ? "opacity-40" : ""}`}
       {...rest}
     >
-      <Text style={[styles.label, variant === "ghost" && styles.labelGhost]}>{label}</Text>
+      <Text className={variants[variant].label}>{label}</Text>
     </Pressable>
   );
-});
-
-const styles = StyleSheet.create({
-  base: {
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  primary: {
-    backgroundColor: colors.accent,
-  },
-  ghost: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: colors.accent,
-  },
-  pressed: {
-    opacity: 0.8,
-  },
-  disabled: {
-    opacity: 0.4,
-  },
-  label: {
-    color: colors.background,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  labelGhost: {
-    color: colors.accent,
-  },
 });

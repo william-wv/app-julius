@@ -1,33 +1,50 @@
+import Constants from "expo-constants";
+import { StatusBar } from "expo-status-bar";
 import type { ReactNode } from "react";
-import { ScrollView, StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
-import { colors } from "../theme/colors";
+import { Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from "react-native";
 
 interface ScreenProps {
   children: ReactNode;
   scroll?: boolean;
-  style?: StyleProp<ViewStyle>;
+  // Faixa escura do topo (<Hero>).
+  hero?: ReactNode;
+  // Tela sem header e sem hero (Entrar na fila, Foto): conteúdo desce abaixo da status bar.
+  headerless?: boolean;
+  // Classes extras para a área de conteúdo (ex: "flex-1" para fixar botão no rodapé).
+  className?: string;
 }
 
-// Container padrão de toda tela: fundo do tema, espaçamento e rolagem opcional.
-export function Screen({ children, scroll = false, style }: ScreenProps) {
-  if (scroll) {
-    return (
-      <ScrollView style={styles.base} contentContainerStyle={[styles.content, style]}>
+// Container padrão de toda tela: fundo branco, hero opcional e conteúdo com o padding do Figma.
+// Teclado: tocar fora de um campo fecha o teclado, e o conteúdo sobe para não ficar coberto.
+export function Screen({ children, scroll = false, hero, headerless = false, className = "" }: ScreenProps) {
+  const top = headerless ? { paddingTop: Constants.statusBarHeight + 16 } : undefined;
+
+  const body = (
+    <>
+      {hero}
+      <View className={`screen-content ${className}`} style={top}>
         {children}
-      </ScrollView>
-    );
-  }
+      </View>
+    </>
+  );
 
-  return <View style={[styles.base, styles.content, style]}>{children}</View>;
+  return (
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+      <StatusBar style={hero ? "light" : "dark"} />
+      {scroll ? (
+        <ScrollView
+          className="screen"
+          contentContainerClassName="grow"
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        >
+          {body}
+        </ScrollView>
+      ) : (
+        <Pressable className="screen" onPress={Keyboard.dismiss} accessible={false}>
+          {body}
+        </Pressable>
+      )}
+    </KeyboardAvoidingView>
+  );
 }
-
-const styles = StyleSheet.create({
-  base: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  content: {
-    padding: 16,
-    gap: 16,
-  },
-});

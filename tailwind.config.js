@@ -1,5 +1,9 @@
-// Cores vêm de theme/colors.ts (mesma fonte usada nos headers/abas e no tema do RNE).
+// Cores vêm de theme/colors.ts (mesma fonte usada nos headers e componentes com style).
+// camelCase do TS vira kebab-case nas classes: textoClaro → text-texto-claro.
 const { colors } = require("./theme/colors.ts");
+
+const kebab = (s) => s.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
+const palette = Object.fromEntries(Object.entries(colors).map(([k, v]) => [kebab(k), v]));
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,20 +11,32 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      colors,
-      // Escala tipográfica do app: usar pelo nome, não pelo tamanho.
+      colors: palette,
+      // Uma família por peso (nomes carregados em theme/fonts.ts).
+      fontFamily: {
+        inter: ["Inter_400Regular"],
+        "inter-medium": ["Inter_500Medium"],
+        "inter-semibold": ["Inter_600SemiBold"],
+        oswald: ["Oswald_700Bold"],
+      },
+      // Escala tipográfica do Figma.
       fontSize: {
-        display: ["48px", { lineHeight: "56px", fontWeight: "700" }],
-        title: ["36px", { lineHeight: "44px", fontWeight: "700" }],
-        body: ["16px", { lineHeight: "24px" }],
-        caption: ["14px", { lineHeight: "20px" }],
+        numero: ["64px", { lineHeight: "76px" }],
+        marca: ["34px", { lineHeight: "42px" }],
+        titulo: ["22px", { lineHeight: "28px" }],
+        destaque: ["18px", { lineHeight: "24px" }],
+        botao: ["16px", { lineHeight: "20px" }],
+        corpo: ["14px", { lineHeight: "20px" }],
+        apoio: ["13px", { lineHeight: "18px" }],
+        rotulo: ["12px", { lineHeight: "16px" }],
+        mini: ["11px", { lineHeight: "14px" }],
       },
       borderRadius: {
-        card: "16px",
-        button: "12px",
+        campo: "12px",
+        botao: "14px",
       },
       spacing: {
-        screen: "16px",
+        tela: "28px",
       },
     },
   },
