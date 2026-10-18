@@ -23,7 +23,7 @@ Closes #
 
 ## Checklist
 
-- [ ] Branch criada a partir da `main` atualizada
+- [ ] Branch criada a partir da `develop` atualizada
 - [ ] Rodou no Expo Go / emulador sem erro
 - [ ] `npx tsc --noEmit` sem erros
 - [ ] Sem warnings novos no terminal do Metro
