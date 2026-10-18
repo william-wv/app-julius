@@ -1,4 +1,7 @@
-import type { Musica } from "../types";
+import type { Genero, Musica } from "../types";
+
+// Ordem de exibição dos gêneros (chips e grade de insígnias).
+export const generos: Genero[] = ["Sertanejo", "Rock", "Pop", "Funk", "MPB", "Forró"];
 
 export const catalogo: Musica[] = [
   { id: "mus_10234", numero: 10234, titulo: "Evidências", artista: "Chitãozinho & Xororó", genero: "Sertanejo" },
