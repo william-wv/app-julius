@@ -1,29 +1,35 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import { Button, Card, Screen } from "../components";
+import { colors } from "../theme/colors";
 
 export default function Home() {
   return (
-    <View style={styles.container}>
+    <Screen>
       <Text style={styles.title}>JULIUS</Text>
-      <Text style={styles.subtitle}>Expo Router configurado.</Text>
-    </View>
+
+      <Card>
+        <Card.Title>Em construção</Card.Title>
+        <Card.Body>
+          <Text style={styles.text}>Componentes base prontos: Screen, Card e Button.</Text>
+        </Card.Body>
+      </Card>
+
+      <Button label="Entrar na fila" disabled />
+      <Button label="Ver minha fila" variant="ghost" disabled />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
   title: {
-    color: "#E7B24C",
+    color: colors.accent,
     fontSize: 32,
     fontWeight: "bold",
     letterSpacing: 2,
+    textAlign: "center",
   },
-  subtitle: {
-    color: "#F5E4DA",
-    fontSize: 13,
+  text: {
+    color: colors.text,
+    fontSize: 14,
   },
 });
