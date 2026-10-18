@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Padrão global do app: classes semânticas montadas com os tokens do tailwind.config.js. */
+@layer components {
+  /* Layout */
+  .screen {
+    @apply flex-1 gap-4 bg-background p-screen;
+  }
+  .screen-content {
+    @apply gap-4 p-screen;
+  }
+
+  /* Tipografia */
+  .brand {
+    @apply text-display tracking-[4px] text-accent;
+  }
+  .heading {
+    @apply text-title text-accent;
+  }
+  .body {
+    @apply text-body text-text;
+  }
+  .muted {
+    @apply text-caption text-muted;
+  }
+  .link {
+    @apply text-body font-semibold text-accent;
+  }
+
+  /* Card */
+  .card {
+    @apply gap-2 rounded-card border border-border bg-surface p-4;
+  }
+  .card-title {
+    @apply text-caption font-bold uppercase tracking-widest text-accent;
+  }
+
+  /* Botão */
+  .btn {
+    @apply items-center rounded-button px-5 py-3.5;
+  }
+  .btn-primary {
+    @apply bg-accent;
+  }
+  .btn-ghost {
+    @apply border border-accent bg-transparent;
+  }
+  .btn-label {
+    @apply text-body font-bold;
+  }
+  .btn-label-primary {
+    @apply text-background;
+  }
+  .btn-label-ghost {
+    @apply text-accent;
+  }
+}
