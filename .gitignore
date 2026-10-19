@@ -1,6 +1,13 @@
-docs
-node_modules
+# Ignore Visual Studio Code settings
+.vscode/
+
+
+/docs
+/node_modules
+
 .expo
+
 dist
+
 *.log
 .DS_Store

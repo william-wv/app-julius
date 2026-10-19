@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Padrão global do app, medido no Figma "Julius Fila — Telas (mobile)". */
+@layer components {
+  /* Layout */
+  .screen {
+    @apply flex-1 bg-branco;
+  }
+  .screen-content {
+    @apply gap-4 px-tela py-8;
+  }
+  .hero {
+    @apply gap-3 bg-palco px-tela pb-10;
+  }
+  .hero-center {
+    @apply items-center gap-4 pb-7;
+  }
+  .hero-vinho {
+    @apply bg-vinho;
+  }
+
+  /* Tipografia */
+  .marca {
+    @apply font-oswald text-marca tracking-[2px] text-luz;
+  }
+  .numero {
+    @apply font-oswald text-numero text-luz;
+  }
+  .titulo {
+    @apply font-inter-semibold text-titulo text-palco;
+  }
+  .secao {
+    @apply font-inter-semibold text-apoio text-palco;
+  }
+  .corpo {
+    @apply font-inter text-corpo text-palco;
+  }
+  .apoio {
+    @apply font-inter text-apoio text-palco opacity-75;
+  }
+  .rotulo {
+    @apply font-inter-medium text-rotulo text-palco opacity-60;
+  }
+  .nota {
+    @apply text-center font-inter text-mini text-palco opacity-55;
+  }
+  .link {
+    @apply font-inter-semibold text-corpo text-vinho;
+  }
+  .texto-claro {
+    @apply font-inter text-corpo text-texto-claro;
+  }
+
+  /* Pílula (status no hero) */
+  .pilula {
+    @apply self-start rounded-full px-3 py-1.5;
+  }
+  .pilula-texto {
+    @apply font-inter-semibold text-rotulo text-palco;
+  }
+
+  /* Botão */
+  .btn {
+    @apply w-full items-center justify-center rounded-botao py-4;
+  }
+  .btn-primary {
+    @apply bg-vinho;
+  }
+  .btn-outline {
+    @apply border border-perigo bg-branco py-3.5;
+  }
+  .btn-secondary {
+    @apply border border-borda bg-branco;
+  }
+  .btn-label-secondary {
+    @apply font-inter-semibold text-botao text-palco;
+  }
+  .btn-label-primary {
+    @apply font-inter-semibold text-botao text-texto-claro;
+  }
+  .btn-label-outline {
+    @apply font-inter-semibold text-corpo text-vinho;
+  }
+
+  /* Card genérico */
+  .card {
+    @apply gap-1.5 rounded-campo bg-superficie px-3.5 py-3;
+  }
+
+  /* Chip de gênero */
+  .chip {
+    @apply rounded-full border border-borda bg-branco px-3.5 py-2;
+  }
+  .chip-ativo {
+    @apply border-vinho bg-vinho;
+  }
+  .chip-texto {
+    @apply font-inter-medium text-apoio text-palco opacity-70;
+  }
+  .chip-texto-ativo {
+    @apply text-texto-claro opacity-100;
+  }
+
+  /* Item da fila */
+  .fila-item {
+    @apply flex-row items-center gap-3 rounded-campo bg-superficie px-3.5 py-3;
+  }
+  .fila-item-voce {
+    @apply bg-pessego;
+  }
+  .fila-posicao {
+    @apply h-7 w-7 items-center justify-center rounded-full bg-vinho;
+  }
+  .fila-posicao-tocando {
+    @apply bg-luz;
+  }
+
+  /* Upload de foto */
+  .foto-vazia {
+    @apply items-center justify-center gap-2.5 rounded-2xl border-[1.5px] border-dashed border-tracejado bg-superficie py-12;
+  }
+  .foto-miniatura {
+    @apply h-20 w-20 rounded-[10px];
+  }
+
+  /* Insígnia (BadgeCard) */
+  .insignia {
+    @apply w-[150px] gap-1.5 rounded-botao bg-luz px-3.5 py-4;
+  }
+  .insignia-bloqueada {
+    @apply bg-bloqueado opacity-70;
+  }
+}
